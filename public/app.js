@@ -1,7 +1,7 @@
 /*
  * Stephen Wai
  * app.js
- * 
+ *
  */
 
 // magic function to get url params
@@ -24,15 +24,23 @@ function getEta(recipient, destination, mode, pos) {
     },
     contentType: 'application/json; charset=utf-8',
     success: function(data) {
-      console.log("Success making AJAX request to ETA");
-      //console.log(data);
-      //var responseBody = JSON.parse(data);
       var responseBody = data;
+      console.log("Success:" + responseBody);
+
+      if (responseBody == "ZERO_RESULTS") {
+        $("#origin-out").text("No results");
+        return;
+      }
+
       var origin = responseBody["origin_addresses"][0];
       var destination = responseBody["destination_addresses"][0];
       var duration = responseBody["rows"][0]["elements"][0]["duration"]["text"];
-      var t = "origin: " + origin + " | destination: " + destination + " | duration: " + duration;
-      console.log(t);
+
+      // debug
+      var debug = "origin: " + origin + " | destination: " + destination + " | duration: " + duration;
+      console.log(debug);
+
+      // update form fields
       $("#origin-out").text(origin);
       $("#destination-out").text(destination);
       $("#duration-out").text(duration);

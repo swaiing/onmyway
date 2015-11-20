@@ -47,24 +47,33 @@ app.get('/eta', function (req, res) {
   var sms = MESSAGE_BODY;
 
   // debug
-  console.log("Calling Google Maps API:")
   console.log(googleUrl);
 
   // call Google Maps API
   request(googleUrl, function (error, response, body) {
       if (!error && response.statusCode == 200) {
+
+        // debug
+        console.log(body);
+
         var responseBody = JSON.parse(body);
-        var duration = responseBody["rows"][0]["elements"][0]["duration"]["text"];
-        var distance = responseBody["rows"][0]["elements"][0]["distance"]["text"];
+        var results = responseBody["rows"]
+
+        // check no results
+        var resultStatus = results[0]["elements"][0]["status"];
+        if (resultStatus == "ZERO_RESULTS")
+          return res.send("ZERO_RESULTS");
+
+        // get results
+        var duration = results[0]["elements"][0]["duration"]["text"];
+        var distance = results[0]["elements"][0]["distance"]["text"];
         var origin = responseBody["origin_addresses"][0];
         sms += duration + " from " + origin;
-
-        console.log("Response:")
-        console.log(body);
 
         // call Twilio API to text recipient
         sendSMS(recipient, sms);
 
+        // write response
         res.send(responseBody);
       }
   }) // end request call
