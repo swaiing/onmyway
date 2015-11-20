@@ -32,6 +32,7 @@ function getEta(recipient, destination, mode, pos) {
         return;
       }
 
+      // TODO: bad code
       var origin = responseBody["origin_addresses"][0];
       var destination = responseBody["destination_addresses"][0];
       var duration = responseBody["rows"][0]["elements"][0]["duration"]["text"];

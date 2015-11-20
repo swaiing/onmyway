@@ -60,11 +60,13 @@ app.get('/eta', function (req, res) {
         var results = responseBody["rows"]
 
         // check no results
+        // TODO: bad code
         var resultStatus = results[0]["elements"][0]["status"];
         if (resultStatus == "ZERO_RESULTS")
           return res.send("ZERO_RESULTS");
 
         // get results
+        // TODO: bad code
         var duration = results[0]["elements"][0]["duration"]["text"];
         var distance = results[0]["elements"][0]["distance"]["text"];
         var origin = responseBody["origin_addresses"][0];
